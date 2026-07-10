@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResinOps — Cannabis Operations Platform</title>
+  <meta name="description" content="The operations platform built by licensed cannabis operators. Cultivation, processing, compliance, and analytics — unified." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #080F08;
+      --dark:    #0D1A0D;
+      --green:   #2D5A3D;
+      --mid:     #3D7A52;
+      --accent:  #7AB648;
+      --amber:   #C8922A;
+      --white:   #F2F5F0;
+      --grey:    #8A9E8A;
+      --lgrey:   #1A2A1A;
+      --border:  #1E321E;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(8,15,8,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 600;
+      color: var(--white); letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: var(--grey); font-size: 14px; text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--accent); color: var(--black);
+      padding: 9px 20px; border-radius: 8px;
+      font-size: 14px; font-weight: 700;
+      text-decoration: none; transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.88; color: var(--black); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 120px 24px 80px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,90,61,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(122,182,72,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: block;
+      width: 32px; height: 1px; background: var(--accent); opacity: 0.5;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(44px, 7vw, 86px);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      max-width: 900px;
+      margin-bottom: 12px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: clamp(17px, 2.2vw, 21px);
+      color: var(--grey);
+      max-width: 600px;
+      margin: 20px auto 48px;
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .hero-ctas {
+      display: flex; gap: 14px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 72px;
+    }
+    .btn-primary {
+      background: var(--accent); color: var(--black);
+      padding: 14px 32px; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; transition: all 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 10px;
+      font-size: 15px; font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.15s; display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--grey); }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%; max-width: 700px;
+    }
+    .stat {
+      flex: 1; padding: 20px 16px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 32px; font-weight: 600;
+      color: var(--white); line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--grey);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 400; line-height: 1.1;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+    .section-body {
+      font-size: 18px; color: var(--grey);
+      max-width: 580px; line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── PROBLEM ── */
+    .problem { background: var(--black); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+      margin-top: 60px;
+    }
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .pain-list li {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 20px;
+      background: var(--lgrey);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px; color: var(--grey); line-height: 1.5;
+    }
+    .pain-list li::before {
+      content: '×';
+      color: #c04040; font-size: 18px; font-weight: 700;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .problem-quote {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 300; font-style: italic;
+      line-height: 1.4; color: var(--white);
+      border-left: 3px solid var(--accent);
+      padding-left: 28px;
+    }
+    .problem-quote cite {
+      display: block; margin-top: 20px;
+      font-style: normal;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; color: var(--grey);
+      font-weight: 400;
+    }
+
+    /* ── FEATURES ── */
+    .features-intro {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: end;
+      margin-bottom: 64px;
+    }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .module-card {
+      padding: 20px 18px;
+      background: var(--lgrey);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .module-card:hover { background: rgba(45,90,61,0.2); }
+    .module-icon { font-size: 20px; margin-bottom: 8px; }
+    .module-name {
+      font-size: 13px; font-weight: 600;
+      color: var(--white); margin-bottom: 4px;
+    }
+    .module-desc { font-size: 12px; color: var(--grey); line-height: 1.4; }
+
+    /* ── HOW IT WORKS ── */
+    .how { background: var(--black); }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-top: 60px;
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .step {
+      padding: 36px 28px;
+      background: var(--lgrey);
+      border-right: 1px solid var(--border);
+    }
+    .step:last-child { border-right: none; }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 16px;
+    }
+    .step-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 400;
+      margin-bottom: 12px; color: var(--white);
+    }
+    .step-body { font-size: 14px; color: var(--grey); line-height: 1.6; }
+
+    /* ── DIFFERENTIATORS ── */
+    .diff-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 24px; margin-top: 60px;
+    }
+    .diff-card {
+      padding: 32px 28px;
+      background: var(--lgrey);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.15s;
+    }
+    .diff-card:hover { border-color: var(--mid); }
+    .diff-card.featured {
+      border-color: var(--green);
+      background: rgba(45,90,61,0.12);
+      grid-column: span 2;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; align-items: center;
+    }
+    .diff-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 12px;
+    }
+    .diff-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 400;
+      margin-bottom: 10px; line-height: 1.2;
+    }
+    .diff-body { font-size: 14px; color: var(--grey); line-height: 1.6; }
+    .diff-stat {
+      font-family: 'Fraunces', serif;
+      font-size: 64px; font-weight: 300;
+      color: var(--accent); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .diff-stat-label { font-size: 14px; color: var(--grey); }
+
+    /* ── COMPLIANCE ── */
+    .compliance { background: var(--black); }
+    .compliance-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-top: 48px;
+    }
+    .compliance-item {
+      padding: 24px 20px;
+      background: var(--lgrey);
+      border: 1px solid var(--border);
+      border-radius: 10px; text-align: center;
+    }
+    .compliance-icon { font-size: 28px; margin-bottom: 10px; }
+    .compliance-name {
+      font-size: 13px; font-weight: 600;
+      color: var(--white); margin-bottom: 4px;
+    }
+    .compliance-desc { font-size: 12px; color: var(--grey); }
+
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-top: 60px;
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .pricing-card {
+      padding: 40px 32px;
+      background: var(--lgrey);
+      border-right: 1px solid var(--border);
+    }
+    .pricing-card:last-child { border-right: none; }
+    .pricing-card.featured { background: rgba(45,90,61,0.15); }
+    .pricing-tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--grey);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .pricing-price {
+      font-family: 'Fraunces', serif;
+      font-size: 48px; font-weight: 300;
+      color: var(--white); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing-price sup { font-size: 24px; vertical-align: top; margin-top: 8px; }
+    .pricing-price sub { font-size: 16px; color: var(--grey); }
+    .pricing-desc {
+      font-size: 13px; color: var(--grey);
+      margin-bottom: 28px; line-height: 1.5;
+    }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .pricing-features li {
+      font-size: 13px; color: var(--grey);
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .pricing-features li::before {
+      content: '✓'; color: var(--accent);
+      font-size: 13px; flex-shrink: 0;
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--accent); color: var(--black);
+      font-size: 10px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    /* ── WAITLIST ── */
+    .waitlist {
+      background: var(--green);
+      position: relative; overflow: hidden;
+    }
+    .waitlist::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(122,182,72,0.15) 0%, transparent 60%);
+    }
+    .waitlist-inner {
+      max-width: 600px; text-align: center; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .waitlist .section-title { color: var(--white); }
+    .waitlist .section-body { color: rgba(255,255,255,0.7); max-width: 500px; margin: 0 auto 40px; }
+    .waitlist-form {
+      display: flex; gap: 12px;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .waitlist-input {
+      flex: 1; min-width: 240px;
+      padding: 14px 18px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: var(--white); font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.15s;
+    }
+    .waitlist-input::placeholder { color: rgba(255,255,255,0.4); }
+    .waitlist-input:focus { border-color: rgba(255,255,255,0.5); }
+    .waitlist-btn {
+      padding: 14px 28px;
+      background: var(--black); color: var(--white);
+      border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: opacity 0.15s;
+    }
+    .waitlist-btn:hover { opacity: 0.85; }
+    .waitlist-note {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      margin-top: 14px;
+    }
+    .waitlist-success {
+      display: none;
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      font-size: 16px; color: var(--white);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 18px; color: var(--white);
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-sub { font-size: 12px; color: var(--grey); margin-top: 4px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 13px; color: var(--grey);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .features-intro { grid-template-columns: 1fr; gap: 40px; }
+      .modules-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; }
+      .step { border-right: none; border-bottom: 1px solid var(--border); }
+      .diff-grid { grid-template-columns: 1fr; }
+      .diff-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+      .compliance-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .stats-bar { flex-wrap: wrap; }
+      .stat { min-width: 45%; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Resin<span>Ops</span></div>
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://app.resinops.com" target="_blank">Sign In</a>
+      <a href="#waitlist" class="nav-cta">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Cannabis Operations Platform</div>
+    <h1>Every part of your operation,<br /><em>finally in one place</em></h1>
+    <p class="hero-sub">
+      From clone cut to customer — cultivation, processing, compliance, lab results, and financials unified in a single platform built by licensed operators who've run the same rooms you're running.
+    </p>
+    <div class="hero-ctas">
+      <a href="#waitlist" class="btn-primary">Get Started Free</a>
+      <a href="https://app.resinops.com" target="_blank" class="btn-secondary">View Live Demo →</a>
+    </div>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-value">28+</div>
+        <div class="stat-label">Integrated modules</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">NY</div>
+        <div class="stat-label">OCM compliant</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Data import types</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">25yr</div>
+        <div class="stat-label">Operator experience</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem" id="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div>
+          <div class="section-label">The problem</div>
+          <h2 class="section-title">You're running a $2M operation on spreadsheets</h2>
+          <p class="section-body" style="margin-bottom:32px;">Licensed cannabis operators today manage their entire business across 8–12 disconnected tools. None of them talk to each other. Data lives in silos. Decisions get made on incomplete information.</p>
+          <ul class="pain-list">
+            <li>Harvest weights in one spreadsheet, COA results in another, sales orders in email</li>
+            <li>METRC compliance tracked separately from your actual production schedule</li>
+            <li>No visibility into cost per pound, strain margins, or labor efficiency</li>
+            <li>Pesticide records built from scratch every time an inspector shows up</li>
+            <li>Lab results manually entered instead of automatically linked to batches</li>
+          </ul>
+        </div>
+        <div>
+          <blockquote class="problem-quote">
+            "I spent three days before our OCM inspection pulling records from five different places. There had to be a better way."
+            <cite>— Licensed cultivator &amp; processor</cite>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORM -->
+  <section id="platform">
+    <div class="container">
+      <div class="features-intro">
+        <div>
+          <div class="section-label">The platform</div>
+          <h2 class="section-title">One system. Every operation.</h2>
+          <p class="section-body">ResinOps connects every domain of your licensed facility — cultivation through distribution — in a single data model. When a harvest batch is created, it flows automatically to lab testing, production scheduling, sales, and financials. No manual re-entry.</p>
+        </div>
+        <div>
+          <p style="font-size:14px;color:var(--grey);line-height:1.7;">
+            Built by operators with 25 years of experience across CO, OR, WA, NY, and emerging markets — covering cultivation, extraction, GMP manufacturing, compliance, cost accounting, and executive operations. Every module reflects decisions made in real facilities, not features designed from the outside.
+          </p>
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <div class="module-card">
+          <div class="module-icon">🌱</div>
+          <div class="module-name">Grow Scheduler</div>
+          <div class="module-desc">Clone-to-harvest Gantt with flip date tracking and projected harvest calendar</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">✂️</div>
+          <div class="module-name">Clone Scheduler</div>
+          <div class="module-desc">Auto back-calculates cut dates from harvest projections by room</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🌿</div>
+          <div class="module-name">Harvest Batches</div>
+          <div class="module-desc">Wet/dry weights, per-grade trim costing, COA linkage, labor estimates</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">⚗️</div>
+          <div class="module-name">Production Scheduler</div>
+          <div class="module-desc">Multi-category Gantt — flower, pre-roll, extract, vape, edibles, tincture</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🧬</div>
+          <div class="module-name">Formulation Calculator</div>
+          <div class="module-desc">N-component cannabinoid blending — target mg/piece for any combination</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🔬</div>
+          <div class="module-name">QC & Lab Testing</div>
+          <div class="module-desc">Full COA panel tracking with auto-link to harvest batches by sample ID</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">📋</div>
+          <div class="module-name">GMP Hub</div>
+          <div class="module-desc">Shift logs, batch records, deviation register, SOP library, cleaning logs</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🌲</div>
+          <div class="module-name">Pesticide Log</div>
+          <div class="module-desc">State-compliant records — EPA reg#, REI, PHI — PDF export ready for any inspection</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">💰</div>
+          <div class="module-name">Sales & Margins</div>
+          <div class="module-desc">Revenue pipeline with confirmed/pending/waitlist tracking and per-batch margin</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🧪</div>
+          <div class="module-name">AI Data Import</div>
+          <div class="module-desc">Drop any CSV or spreadsheet — the platform identifies and imports it automatically</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">🧠</div>
+          <div class="module-name">Operations Analyst</div>
+          <div class="module-desc">Ask plain-English questions — get answers from your live facility data</div>
+        </div>
+        <div class="module-card">
+          <div class="module-icon">📄</div>
+          <div class="module-name">CoC Registry</div>
+          <div class="module-desc">Certificates of Conformity for ingredients and hardware — linked to batches</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">Operational from day one</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">STEP 01</div>
+          <h3 class="step-title">Import your existing data</h3>
+          <p class="step-body">Drop your existing spreadsheets, METRC exports, or lab CSV files. ResinOps automatically identifies what type of data it is — harvest batches, COAs, sales orders, spray logs — and imports it with the right structure. No manual mapping required.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">STEP 02</div>
+          <h3 class="step-title">Connect your operation</h3>
+          <p class="step-body">Configure your rooms, strains, team, and SKUs once. Every batch created after that automatically flows through cultivation → harvest → processing → QC → sales. Data entered in one place shows up everywhere it's relevant.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">STEP 03</div>
+          <h3 class="step-title">Run your business from one screen</h3>
+          <p class="step-body">Your dashboard shows confirmed revenue, upcoming harvests, QC holds, compliance alerts, and strain performance — updated in real time. When an inspector calls, your pesticide log and batch records are one click away.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENTIATORS -->
+  <section id="why">
+    <div class="container">
+      <div class="section-label">Why ResinOps</div>
+      <h2 class="section-title">Built different</h2>
+      <div class="diff-grid">
+        <div class="diff-card featured">
+          <div>
+            <div class="diff-label">Domain depth</div>
+            <h3 class="diff-title">Every feature was built by someone who has done the job</h3>
+            <p class="diff-body">The pesticide log knows the difference between cultivation inputs and EPA-registered pesticides because the person who built it has held both a Category 24 and a Category 1A license. The harvest batch module knows about per-grade trim costing because that's how post-harvest labor actually works. This level of specificity can't be reverse-engineered from the outside.</p>
+          </div>
+          <div style="text-align:center;">
+            <div class="diff-stat">25</div>
+            <div class="diff-stat-label">Years of licensed cannabis operations experience embedded in the platform</div>
+          </div>
+        </div>
+        <div class="diff-card">
+          <div class="diff-label">Compliance-first</div>
+          <h3 class="diff-title">Compliance-ready out of the box</h3>
+          <p class="diff-body">Pesticide logs formatted for state inspections. Batch records that meet GMP requirements. METRC integration for seed-to-sale states. Built for the regulatory environment you actually operate in — not a generic platform you have to retrofit for your market.</p>
+        </div>
+        <div class="diff-card">
+          <div class="diff-label">AI that understands cannabis</div>
+          <h3 class="diff-title">Import anything. Ask anything.</h3>
+          <p class="diff-body">Drop a CSV from any source and the platform figures out what it is. Ask "which strain is most profitable per pound?" and get an answer from your actual data — not a generic dashboard widget you have to interpret yourself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <section class="compliance" id="compliance">
+    <div class="container">
+      <div class="section-label">Compliance</div>
+      <h2 class="section-title">Inspection-ready every day</h2>
+      <p class="section-body">ResinOps generates the documentation regulators ask for — on demand, in the right format, linked to the right records.</p>
+      <div class="compliance-grid">
+        <div class="compliance-item">
+          <div class="compliance-icon">📋</div>
+          <div class="compliance-name">State Pesticide Log</div>
+          <div class="compliance-desc">PDF export with EPA reg#, REI, PHI, weather data, applicator license</div>
+        </div>
+        <div class="compliance-item">
+          <div class="compliance-icon">📄</div>
+          <div class="compliance-name">GMP Batch Records</div>
+          <div class="compliance-desc">Sign-offs, COA results, deviations — print-ready PDF for any batch</div>
+        </div>
+        <div class="compliance-item">
+          <div class="compliance-icon">🧫</div>
+          <div class="compliance-name">COA Traceability</div>
+          <div class="compliance-desc">Lab results linked to harvest batches by sample ID — automatic, not manual</div>
+        </div>
+        <div class="compliance-item">
+          <div class="compliance-icon">📦</div>
+          <div class="compliance-name">CoC Registry</div>
+          <div class="compliance-desc">Ingredient and hardware certificates linked to production batch records</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->  <!-- PRICING -->
+  <section id="pricing" style="background:var(--black);">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, operator-focused pricing</h2>
+      <p class="section-body">One platform, one price per facility. No per-user fees. No module unlocks. Everything included.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">Starter</div>
+          <div class="pricing-price"><sup>$</sup>299<sub>/mo</sub></div>
+          <p class="pricing-desc">For single-license cultivators and processors getting organized.</p>
+          <ul class="pricing-features">
+            <li>All 28+ modules included</li>
+            <li>1 facility, up to 5 users</li>
+            <li>AI data import</li>
+            <li>State compliance exports (NY, CO, OR, WA + more)</li>
+            <li>GMP batch records</li>
+            <li>Email support</li>
+          </ul>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-tier">Professional</div>
+          <div class="pricing-price"><sup>$</sup>499<sub>/mo</sub></div>
+          <p class="pricing-desc">For licensed processors with active vape and extract programs.</p>
+          <ul class="pricing-features">
+            <li>Everything in Starter</li>
+            <li>Unlimited users</li>
+            <li>AI Operations Analyst</li>
+            <li>Cannabinoid formulation calculator</li>
+            <li>Certificate of Conformity registry</li>
+            <li>Priority support</li>
+          </ul>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-tier">Enterprise</div>
+          <div class="pricing-price" style="font-size:36px;padding-top:8px;">Custom</div>
+          <p class="pricing-desc">For multi-license operators, MSOs, and chain facilities.</p>
+          <ul class="pricing-features">
+            <li>Everything in Professional</li>
+            <li>Multi-facility dashboard</li>
+            <li>Custom integrations</li>
+            <li>Dedicated onboarding</li>
+            <li>SLA support</li>
+            <li>Custom compliance reporting</li>
+          </ul>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:13px;color:var(--grey);margin-top:24px;">Free tier available. Start with your first facility — upgrade as you grow.</p>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist" id="waitlist">
+    <div class="waitlist-inner">
+      <div class="section-label" style="color:rgba(255,255,255,0.6);">Get started</div>
+      <h2 class="section-title">Start running your facility smarter</h2>
+      <p class="section-body">Licensed operators across every legal market. Set up takes minutes. Your feedback shapes the platform.</p>
+      <div class="waitlist-form" id="waitlist-form">
+        <input type="text" class="waitlist-input" id="wl-name" placeholder="Your name" />
+        <input type="email" class="waitlist-input" id="wl-email" placeholder="Work email" />
+        <input type="text" class="waitlist-input" id="wl-facility" placeholder="Facility name" />
+        <button class="waitlist-btn" onclick="submitWaitlist()">Get Started Free</button>
+      </div>
+      <div class="waitlist-success" id="waitlist-success">
+        ✓ You're on the list. We'll be in touch within 48 hours.
+      </div>
+      <p class="waitlist-note">No credit card required. Free tier includes one facility.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Resin<span>Ops</span></div>
+        <div class="footer-sub">Old Guard Cannabis Advisors LLC · Skaneateles, NY</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://app.resinops.com" target="_blank">Platform</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#waitlist">Get Started</a>
+        <a href="mailto:alex@oldguardcannabis.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Waitlist form
+    async function submitWaitlist() {
+      const name = document.getElementById('wl-name').value.trim();
+      const email = document.getElementById('wl-email').value.trim();
+      const facility = document.getElementById('wl-facility').value.trim();
+      if (!name || !email) { alert('Please enter your name and email.'); return; }
+
+      // Store locally + show success (replace with Supabase insert or Typeform later)
+      try {
+        const existing = JSON.parse(localStorage.getItem('resinops_waitlist') || '[]');
+        existing.push({ name, email, facility, ts: new Date().toISOString() });
+        localStorage.setItem('resinops_waitlist', JSON.stringify(existing));
+      } catch(e) {}
+
+      document.getElementById('waitlist-form').style.display = 'none';
+      document.getElementById('waitlist-success').style.display = 'block';
+
+      // mailto fallback so you actually get notified
+      window.location.href = `mailto:alex@oldguardcannabis.com?subject=ResinOps Access Request&body=Name: ${name}%0AEmail: ${email}%0AFacility: ${facility}`;
+    }
+
+    // Smooth scroll offset for fixed nav
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const top = target.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
