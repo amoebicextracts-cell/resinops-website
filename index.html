@@ -498,7 +498,7 @@
       <a href="#compliance">Compliance</a>
       <a href="#pricing">Pricing</a>
       <a href="https://app.resinops.com" target="_blank">Sign In</a>
-      <a href="#waitlist" class="nav-cta">Get Started Free</a>
+      <a href="#waitlist" class="nav-cta">Request Access</a>
     </div>
   </nav>
 
@@ -510,7 +510,7 @@
       From clone cut to customer — cultivation, processing, compliance, lab results, and financials unified in a single platform built by licensed operators who've run the same rooms you're running.
     </p>
     <div class="hero-ctas">
-      <a href="#waitlist" class="btn-primary">Get Started Free</a>
+      <a href="#waitlist" class="btn-primary">Request Access</a>
       <a href="https://app.resinops.com" target="_blank" class="btn-secondary">View Live Demo →</a>
     </div>
     <div class="stats-bar">
@@ -788,13 +788,16 @@
       <div class="waitlist-form" id="waitlist-form">
         <input type="text" class="waitlist-input" id="wl-name" placeholder="Your name" />
         <input type="email" class="waitlist-input" id="wl-email" placeholder="Work email" />
-        <input type="text" class="waitlist-input" id="wl-facility" placeholder="Facility name" />
-        <button class="waitlist-btn" onclick="submitWaitlist()">Get Started Free</button>
+        <input type="text" class="waitlist-input" id="wl-facility" placeholder="Facility / company name" />
+        <input type="text" class="waitlist-input" id="wl-license" placeholder="License type (e.g. Adult-Use Processor)" />
+        <input type="text" class="waitlist-input" id="wl-state" placeholder="State (e.g. NY, CO, OR)" />
+        <input type="text" class="waitlist-input" id="wl-role" placeholder="Your role (e.g. Director of Ops)" />
+        <button class="waitlist-btn" onclick="submitWaitlist()">Request Access</button>
       </div>
       <div class="waitlist-success" id="waitlist-success">
-        ✓ You're on the list. We'll be in touch within 48 hours.
+        ✓ Request received. We'll review your application and reach out within 48 hours to set up your account.
       </div>
-      <p class="waitlist-note">No credit card required. Free tier includes one facility.</p>
+      <p class="waitlist-note">Accounts are provisioned by our team after review. No self-service sign-up — your data stays secure from day one.</p>
     </div>
   </section>
 
@@ -808,7 +811,7 @@
       <div class="footer-links">
         <a href="https://app.resinops.com" target="_blank">Platform</a>
         <a href="#pricing">Pricing</a>
-        <a href="#waitlist">Get Started</a>
+        <a href="#waitlist">Request Access</a>
         <a href="mailto:alex@oldguardcannabis.com">Contact</a>
       </div>
     </div>
@@ -820,20 +823,25 @@
       const name = document.getElementById('wl-name').value.trim();
       const email = document.getElementById('wl-email').value.trim();
       const facility = document.getElementById('wl-facility').value.trim();
+      const license = document.getElementById('wl-license').value.trim();
+      const state = document.getElementById('wl-state').value.trim();
+      const role = document.getElementById('wl-role').value.trim();
       if (!name || !email) { alert('Please enter your name and email.'); return; }
-
-      // Store locally + show success (replace with Supabase insert or Typeform later)
-      try {
-        const existing = JSON.parse(localStorage.getItem('resinops_waitlist') || '[]');
-        existing.push({ name, email, facility, ts: new Date().toISOString() });
-        localStorage.setItem('resinops_waitlist', JSON.stringify(existing));
-      } catch(e) {}
 
       document.getElementById('waitlist-form').style.display = 'none';
       document.getElementById('waitlist-success').style.display = 'block';
 
-      // mailto fallback so you actually get notified
-      window.location.href = `mailto:alex@oldguardcannabis.com?subject=ResinOps Access Request&body=Name: ${name}%0AEmail: ${email}%0AFacility: ${facility}`;
+      // Send email notification
+      const body = [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Facility: ${facility || 'Not provided'}`,
+        `License Type: ${license || 'Not provided'}`,
+        `State: ${state || 'Not provided'}`,
+        `Role: ${role || 'Not provided'}`,
+        `Submitted: ${new Date().toLocaleString()}`,
+      ].join('%0A');
+      window.location.href = `mailto:alex@oldguardcannabis.com?subject=ResinOps Access Request — ${facility || name}&body=${body}`;
     }
 
     // Smooth scroll offset for fixed nav
