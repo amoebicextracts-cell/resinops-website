@@ -79,9 +79,15 @@
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,90,61,0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(122,182,72,0.08) 0%, transparent 60%);
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,90,61,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(122,182,72,0.10) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(8,15,8,0.90) 0%, rgba(13,26,13,0.95) 55%, var(--dark) 100%),
+        url('images/resin-drop.jpg');
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+      background-position: center, center, center, center 28%;
+      background-size: auto, auto, auto, cover;
+      z-index: -1;
       pointer-events: none;
     }
     .hero-eyebrow {
