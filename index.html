@@ -142,22 +142,20 @@
     /* ── STATS BAR ── */
     .stats-bar {
       display: flex; gap: 0;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       width: 100%; max-width: 700px;
     }
     .stat {
-      flex: 1; padding: 20px 16px;
+      flex: 1; padding: 18px 16px;
       text-align: center;
       border-right: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
     }
     .stat:last-child { border-right: none; }
     .stat-value {
       font-family: 'Fraunces', serif;
-      font-size: 32px; font-weight: 600;
-      color: var(--white); line-height: 1;
+      font-size: 30px; font-weight: 500;
+      color: var(--amber); line-height: 1;
       margin-bottom: 6px;
     }
     .stat-label {
@@ -170,10 +168,15 @@
     section { padding: 96px 24px; }
     .container { max-width: 1100px; margin: 0 auto; }
     .section-label {
+      display: flex; align-items: center; gap: 10px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px; color: var(--accent);
       text-transform: uppercase; letter-spacing: 0.14em;
       margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: ''; display: block;
+      width: 24px; height: 1px; background: currentColor; opacity: 0.5;
     }
     .section-title {
       font-family: 'Fraunces', serif;
@@ -248,7 +251,20 @@
       transition: background 0.15s;
     }
     .module-card:hover { background: rgba(45,90,61,0.2); }
-    .module-icon { font-size: 20px; margin-bottom: 8px; }
+    .icon-ring {
+      width: 38px; height: 38px; margin-bottom: 12px; border-radius: 50%;
+      border: 1px solid var(--amber);
+      background: rgba(200,146,42,0.06);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .icon-ring::before {
+      content: ''; position: absolute; inset: 4px;
+      border: 1px solid var(--border); border-radius: 50%;
+    }
+    .icon-ring span { position: relative; z-index: 1; font-size: 15px; line-height: 1; }
+    .icon-ring--lg { width: 48px; height: 48px; margin: 0 auto 12px; }
+    .icon-ring--lg span { font-size: 19px; }
     .module-name {
       font-size: 13px; font-weight: 600;
       color: var(--white); margin-bottom: 4px;
@@ -295,12 +311,19 @@
     }
     .diff-card:hover { border-color: var(--mid); }
     .diff-card.featured {
+      position: relative;
       border-color: var(--green);
       background: rgba(45,90,61,0.12);
       grid-column: span 2;
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 40px; align-items: center;
     }
+    .diff-card.featured::before, .diff-card.featured::after {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border: 1px solid var(--amber);
+    }
+    .diff-card.featured::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .diff-card.featured::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
     .diff-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px; color: var(--accent);
@@ -313,10 +336,14 @@
       margin-bottom: 10px; line-height: 1.2;
     }
     .diff-body { font-size: 14px; color: var(--grey); line-height: 1.6; }
+    .diff-proof {
+      border-top: 1px solid var(--border);
+      padding-top: 22px;
+    }
     .diff-stat {
       font-family: 'Fraunces', serif;
       font-size: 64px; font-weight: 300;
-      color: var(--accent); line-height: 1;
+      color: var(--amber); line-height: 1;
       margin-bottom: 8px;
     }
     .diff-stat-label { font-size: 14px; color: var(--grey); }
@@ -333,7 +360,6 @@
       border: 1px solid var(--border);
       border-radius: 10px; text-align: center;
     }
-    .compliance-icon { font-size: 28px; margin-bottom: 10px; }
     .compliance-name {
       font-size: 13px; font-weight: 600;
       color: var(--white); margin-bottom: 4px;
@@ -384,7 +410,7 @@
     }
     .pricing-badge {
       display: inline-block;
-      background: var(--accent); color: var(--black);
+      background: var(--amber); color: var(--black);
       font-size: 10px; font-weight: 700;
       padding: 3px 10px; border-radius: 20px;
       text-transform: uppercase; letter-spacing: 0.06em;
@@ -577,62 +603,62 @@
 
       <div class="modules-grid">
         <div class="module-card">
-          <div class="module-icon">🌱</div>
+          <div class="icon-ring"><span>🌱</span></div>
           <div class="module-name">Grow Scheduler</div>
           <div class="module-desc">Clone-to-harvest Gantt with flip date tracking and projected harvest calendar</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">✂️</div>
+          <div class="icon-ring"><span>✂️</span></div>
           <div class="module-name">Clone Scheduler</div>
           <div class="module-desc">Auto back-calculates cut dates from harvest projections by room</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🌿</div>
+          <div class="icon-ring"><span>🌿</span></div>
           <div class="module-name">Harvest Batches</div>
           <div class="module-desc">Wet/dry weights, per-grade trim costing, COA linkage, labor estimates</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">⚗️</div>
+          <div class="icon-ring"><span>⚗️</span></div>
           <div class="module-name">Production Scheduler</div>
           <div class="module-desc">Multi-category Gantt — flower, pre-roll, extract, vape, edibles, tincture</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🧬</div>
+          <div class="icon-ring"><span>🧬</span></div>
           <div class="module-name">Formulation Calculator</div>
           <div class="module-desc">N-component cannabinoid blending — target mg/piece for any combination</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🔬</div>
+          <div class="icon-ring"><span>🔬</span></div>
           <div class="module-name">QC & Lab Testing</div>
           <div class="module-desc">Full COA panel tracking with auto-link to harvest batches by sample ID</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">📋</div>
+          <div class="icon-ring"><span>📋</span></div>
           <div class="module-name">GMP Hub</div>
           <div class="module-desc">Shift logs, batch records, deviation register, SOP library, cleaning logs</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🌲</div>
+          <div class="icon-ring"><span>🌲</span></div>
           <div class="module-name">Pesticide Log</div>
           <div class="module-desc">State-compliant records — EPA reg#, REI, PHI — PDF export ready for any inspection</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">💰</div>
+          <div class="icon-ring"><span>💰</span></div>
           <div class="module-name">Sales & Margins</div>
           <div class="module-desc">Revenue pipeline with confirmed/pending/waitlist tracking and per-batch margin</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🧪</div>
+          <div class="icon-ring"><span>🧪</span></div>
           <div class="module-name">AI Data Import</div>
           <div class="module-desc">Drop any CSV or spreadsheet — the platform identifies and imports it automatically</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">🧠</div>
+          <div class="icon-ring"><span>🧠</span></div>
           <div class="module-name">Operations Analyst</div>
           <div class="module-desc">Ask plain-English questions — get answers from your live facility data</div>
         </div>
         <div class="module-card">
-          <div class="module-icon">📄</div>
+          <div class="icon-ring"><span>📄</span></div>
           <div class="module-name">CoC Registry</div>
           <div class="module-desc">Certificates of Conformity for ingredients and hardware — linked to batches</div>
         </div>
@@ -677,7 +703,7 @@
             <h3 class="diff-title">Every feature was built by someone who has done the job</h3>
             <p class="diff-body">The pesticide log knows the difference between cultivation inputs and EPA-registered pesticides because the person who built it has held both a Category 24 and a Category 1A license. The harvest batch module knows about per-grade trim costing because that's how post-harvest labor actually works. This level of specificity can't be reverse-engineered from the outside.</p>
           </div>
-          <div style="text-align:center;">
+          <div class="diff-proof" style="text-align:center;">
             <div class="diff-stat">25</div>
             <div class="diff-stat-label">Years of licensed cannabis operations experience embedded in the platform</div>
           </div>
@@ -704,22 +730,22 @@
       <p class="section-body">ResinOps generates the documentation regulators ask for — on demand, in the right format, linked to the right records.</p>
       <div class="compliance-grid">
         <div class="compliance-item">
-          <div class="compliance-icon">📋</div>
+          <div class="icon-ring icon-ring--lg"><span>📋</span></div>
           <div class="compliance-name">State Pesticide Log</div>
           <div class="compliance-desc">PDF export with EPA reg#, REI, PHI, weather data, applicator license</div>
         </div>
         <div class="compliance-item">
-          <div class="compliance-icon">📄</div>
+          <div class="icon-ring icon-ring--lg"><span>📄</span></div>
           <div class="compliance-name">GMP Batch Records</div>
           <div class="compliance-desc">Sign-offs, COA results, deviations — print-ready PDF for any batch</div>
         </div>
         <div class="compliance-item">
-          <div class="compliance-icon">🧫</div>
+          <div class="icon-ring icon-ring--lg"><span>🧫</span></div>
           <div class="compliance-name">COA Traceability</div>
           <div class="compliance-desc">Lab results linked to harvest batches by sample ID — automatic, not manual</div>
         </div>
         <div class="compliance-item">
-          <div class="compliance-icon">📦</div>
+          <div class="icon-ring icon-ring--lg"><span>📦</span></div>
           <div class="compliance-name">CoC Registry</div>
           <div class="compliance-desc">Ingredient and hardware certificates linked to production batch records</div>
         </div>
