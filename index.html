@@ -464,6 +464,7 @@
       transition: opacity 0.15s;
     }
     .waitlist-btn:hover { opacity: 0.85; }
+    .waitlist-btn:disabled { opacity: 0.6; cursor: default; }
     .waitlist-note {
       font-size: 12px; color: rgba(255,255,255,0.5);
       margin-top: 14px;
@@ -850,7 +851,8 @@
   </footer>
 
   <script>
-    // Waitlist form
+    // Waitlist form — POSTs to Web3Forms (no backend of our own needed)
+    const WEB3FORMS_ACCESS_KEY = '321b0f08-f6c4-4146-ac04-a0dc9559fe62';
     async function submitWaitlist() {
       const name = document.getElementById('wl-name').value.trim();
       const email = document.getElementById('wl-email').value.trim();
@@ -860,20 +862,30 @@
       const role = document.getElementById('wl-role').value.trim();
       if (!name || !email) { alert('Please enter your name and email.'); return; }
 
-      document.getElementById('waitlist-form').style.display = 'none';
-      document.getElementById('waitlist-success').style.display = 'block';
+      const btn = document.querySelector('.waitlist-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
 
-      // Send email notification
-      const body = [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Facility: ${facility || 'Not provided'}`,
-        `License Type: ${license || 'Not provided'}`,
-        `State: ${state || 'Not provided'}`,
-        `Role: ${role || 'Not provided'}`,
-        `Submitted: ${new Date().toLocaleString()}`,
-      ].join('%0A');
-      window.location.href = `mailto:alex@oldguardcannabis.com?subject=ResinOps Access Request — ${facility || name}&body=${body}`;
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: `ResinOps Access Request — ${facility || name}`,
+            from_name: 'ResinOps — Website',
+            name, email, facility, license, state, role,
+          }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Submission failed');
+        document.getElementById('waitlist-form').style.display = 'none';
+        document.getElementById('waitlist-success').style.display = 'block';
+      } catch (e) {
+        alert('Something went wrong sending that — please email alex@oldguardcannabis.com directly.');
+        btn.disabled = false;
+        btn.textContent = 'Request Access';
+      }
     }
 
     // Smooth scroll offset for fixed nav
