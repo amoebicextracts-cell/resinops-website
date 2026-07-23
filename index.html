@@ -59,13 +59,13 @@
       transition: color 0.15s;
     }
     .nav-links a:hover { color: var(--white); }
-    .nav-cta {
-      background: var(--accent); color: var(--black);
+    .nav-links .nav-cta {
+      background: var(--amber); color: var(--black);
       padding: 9px 20px; border-radius: 8px;
       font-size: 14px; font-weight: 700;
       text-decoration: none; transition: opacity 0.15s;
     }
-    .nav-cta:hover { opacity: 0.88; color: var(--black); }
+    .nav-links .nav-cta:hover { opacity: 0.88; color: var(--black); }
 
     /* ── HERO ── */
     .hero {
@@ -128,7 +128,7 @@
       flex-wrap: wrap; margin-bottom: 72px;
     }
     .btn-primary {
-      background: var(--accent); color: var(--black);
+      background: var(--amber); color: var(--black);
       padding: 14px 32px; border-radius: 10px;
       font-size: 15px; font-weight: 700;
       text-decoration: none; transition: all 0.15s;
@@ -373,56 +373,6 @@
     .compliance-desc { font-size: 12px; color: var(--grey); }
 
 
-    /* ── PRICING ── */
-    .pricing-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 2px; margin-top: 60px;
-      border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden;
-    }
-    .pricing-card {
-      padding: 40px 32px;
-      background: var(--lgrey);
-      border-right: 1px solid var(--border);
-    }
-    .pricing-card:last-child { border-right: none; }
-    .pricing-card.featured { background: rgba(45,90,61,0.15); }
-    .pricing-tier {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; color: var(--grey);
-      text-transform: uppercase; letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-    .pricing-price {
-      font-family: 'Fraunces', serif;
-      font-size: 48px; font-weight: 300;
-      color: var(--white); line-height: 1;
-      margin-bottom: 4px;
-    }
-    .pricing-price sup { font-size: 24px; vertical-align: top; margin-top: 8px; }
-    .pricing-price sub { font-size: 16px; color: var(--grey); }
-    .pricing-desc {
-      font-size: 13px; color: var(--grey);
-      margin-bottom: 28px; line-height: 1.5;
-    }
-    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .pricing-features li {
-      font-size: 13px; color: var(--grey);
-      display: flex; gap: 10px; align-items: flex-start;
-    }
-    .pricing-features li::before {
-      content: '✓'; color: var(--accent);
-      font-size: 13px; flex-shrink: 0;
-    }
-    .pricing-badge {
-      display: inline-block;
-      background: var(--amber); color: var(--black);
-      font-size: 10px; font-weight: 700;
-      padding: 3px 10px; border-radius: 20px;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      margin-bottom: 12px;
-    }
-
     /* ── WAITLIST ── */
     .waitlist {
       background: var(--green);
@@ -501,6 +451,51 @@
     }
     .footer-links a:hover { color: var(--white); }
 
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── PHOTO BAND ── */
+    .photo-band {
+      position: relative;
+      height: 56vh; min-height: 340px;
+      background-size: cover; background-position: center;
+      display: flex; align-items: flex-end;
+      padding: 0 0 40px;
+      overflow: hidden;
+    }
+    .photo-band::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(0deg, rgba(8,15,8,0.92) 0%, rgba(8,15,8,0.35) 55%, rgba(8,15,8,0.55) 100%),
+        linear-gradient(90deg, rgba(8,15,8,0.5) 0%, transparent 40%);
+    }
+    .photo-band-inner {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      padding: 0 24px;
+    }
+    .photo-band-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      margin-bottom: 10px;
+    }
+    .photo-band-text {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(24px, 3.4vw, 38px);
+      font-weight: 300; font-style: italic;
+      color: var(--white); line-height: 1.3;
+      max-width: 640px;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -513,8 +508,7 @@
       .diff-grid { grid-template-columns: 1fr; }
       .diff-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
       .compliance-grid { grid-template-columns: repeat(2, 1fr); }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .pricing-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .photo-band { height: 42vh; min-height: 260px; }
       .stats-bar { flex-wrap: wrap; }
       .stat { min-width: 45%; }
       .footer-inner { flex-direction: column; text-align: center; }
@@ -527,9 +521,10 @@
   <nav>
     <div class="nav-logo">Resin<span>Ops</span></div>
     <div class="nav-links">
+      <a href="#cultivation">Cultivation</a>
       <a href="#platform">Platform</a>
       <a href="#compliance">Compliance</a>
-      <a href="#pricing">Pricing</a>
+      <a href="#pilot">Pilot Program</a>
       <a href="https://app.resinops.com" target="_blank">Sign In</a>
       <a href="#waitlist" class="nav-cta">Request Access</a>
     </div>
@@ -548,7 +543,7 @@
     </div>
     <div class="stats-bar">
       <div class="stat">
-        <div class="stat-value">28+</div>
+        <div class="stat-value">33+</div>
         <div class="stat-label">Integrated modules</div>
       </div>
       <div class="stat">
@@ -556,8 +551,8 @@
         <div class="stat-label">OCM compliant</div>
       </div>
       <div class="stat">
-        <div class="stat-value">12</div>
-        <div class="stat-label">Data import types</div>
+        <div class="stat-value">Free</div>
+        <div class="stat-label">During the pilot</div>
       </div>
       <div class="stat">
         <div class="stat-value">25yr</div>
@@ -592,6 +587,45 @@
     </div>
   </section>
 
+  <!-- CULTIVATION SPOTLIGHT -->
+  <section id="cultivation" style="background:var(--black);">
+    <div class="container">
+      <div class="section-label">Cultivation</div>
+      <h2 class="section-title">Everything starts here — and it shows</h2>
+      <p class="section-body">Cultivation isn't an afterthought bolted onto a compliance tool. It's where ResinOps starts: clone cut, mother plants, genetics, rooms, and inputs, all tracked with the detail an actual grower needs.</p>
+      <div class="compliance-grid">
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>✂️</span></div>
+          <div class="compliance-name">Clone to Harvest Timeline</div>
+          <div class="compliance-desc">Grow Scheduler and Clone Scheduler back-calculate every date automatically, per room</div>
+        </div>
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>🌳</span></div>
+          <div class="compliance-name">Genetics & Mother Plants</div>
+          <div class="compliance-desc">Mother Plant Manager, Pheno Hunt Tracker, and Strain Database keep your genetic lineage organized</div>
+        </div>
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>🗺️</span></div>
+          <div class="compliance-name">Room & Space Tracking</div>
+          <div class="compliance-desc">Grow Map holds every room's status, canopy, and reset timing in one persistent registry</div>
+        </div>
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>🐛</span></div>
+          <div class="compliance-name">IPM & Inputs</div>
+          <div class="compliance-desc">Pest scouting and nutrient tracking, kept separate from your regulated pesticide log</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO BAND: VEG ROOM -->
+  <div class="photo-band" style="background-image:url('images/veg-room.jpg');">
+    <div class="photo-band-inner reveal">
+      <div class="photo-band-label">Inside a real facility</div>
+      <p class="photo-band-text">Not a demo environment — this is what the platform was built to run.</p>
+    </div>
+  </div>
+
   <!-- PLATFORM -->
   <section id="platform">
     <div class="container">
@@ -625,6 +659,41 @@
           <div class="module-desc">Wet/dry weights, per-grade trim costing, COA linkage, labor estimates</div>
         </div>
         <div class="module-card">
+          <div class="icon-ring"><span>🪴</span></div>
+          <div class="module-name">Strain Database</div>
+          <div class="module-desc">Parentage, aggregated COA data, and AI-generated sales descriptions per strain</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🗺️</span></div>
+          <div class="module-name">Grow Map</div>
+          <div class="module-desc">Persistent room & space registry — status, canopy, reset timing for every grow area</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🌳</span></div>
+          <div class="module-name">Mother Plant Manager</div>
+          <div class="module-desc">Track mother plants by strain, cycle timing, and cuts available — feeds straight into Clone Scheduler</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🔭</span></div>
+          <div class="module-name">Pheno Hunt Tracker</div>
+          <div class="module-desc">Seed-by-seed tracking from germination through COA scoring to keeper selection</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🧫</span></div>
+          <div class="module-name">TC Tracker</div>
+          <div class="module-desc">Tissue culture vessel tracking — explant to acclimatization, contamination logging</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🐛</span></div>
+          <div class="module-name">IPM Tracker</div>
+          <div class="module-desc">Pest scouting and beneficial insect releases, scheduled against upcoming production batches</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>💧</span></div>
+          <div class="module-name">Cultivation Inputs</div>
+          <div class="module-desc">Nutrients, amendments, and beneficial releases with regulatory-grade documentation</div>
+        </div>
+        <div class="module-card">
           <div class="icon-ring"><span>⚗️</span></div>
           <div class="module-name">Production Scheduler</div>
           <div class="module-desc">Multi-category Gantt — flower, pre-roll, extract, vape, edibles, tincture</div>
@@ -655,9 +724,19 @@
           <div class="module-desc">Revenue pipeline with confirmed/pending/waitlist tracking and per-batch margin</div>
         </div>
         <div class="module-card">
+          <div class="icon-ring"><span>🧮</span></div>
+          <div class="module-name">Cost & P&L</div>
+          <div class="module-desc">COGS per batch, §280E-structured P&L, AP/AR aging, cost-pool allocation — PDF-ready annual summary</div>
+        </div>
+        <div class="module-card">
+          <div class="icon-ring"><span>🤝</span></div>
+          <div class="module-name">Customers / CRM</div>
+          <div class="module-desc">Dispensary & wholesale accounts, pipeline stages, and full order history rollup</div>
+        </div>
+        <div class="module-card">
           <div class="icon-ring"><span>🧪</span></div>
           <div class="module-name">AI Data Import</div>
-          <div class="module-desc">Drop any CSV or spreadsheet — the platform identifies and imports it automatically</div>
+          <div class="module-desc">Drop any CSV or spreadsheet — the platform identifies and imports it automatically across 18 data types</div>
         </div>
         <div class="module-card">
           <div class="icon-ring"><span>🧠</span></div>
@@ -672,6 +751,14 @@
       </div>
     </div>
   </section>
+
+  <!-- PHOTO BAND: EXTRACTION LAB -->
+  <div class="photo-band" style="background-image:url('images/product-live-resin.jpg');background-position:center;">
+    <div class="photo-band-inner reveal">
+      <div class="photo-band-label">From flower to finished product</div>
+      <p class="photo-band-text">Extraction, processing, packaging — every step tracked, none of it re-entered by hand.</p>
+    </div>
+  </div>
 
   <!-- HOW IT WORKS -->
   <section class="how" id="how">
@@ -708,7 +795,7 @@
           <div>
             <div class="diff-label">Domain depth</div>
             <h3 class="diff-title">Every feature was built by someone who has done the job</h3>
-            <p class="diff-body">The pesticide log knows the difference between cultivation inputs and EPA-registered pesticides because the person who built it has held both a Category 24 and a Category 1A license. The harvest batch module knows about per-grade trim costing because that's how post-harvest labor actually works. This level of specificity can't be reverse-engineered from the outside.</p>
+            <p class="diff-body">The harvest batch module tracks per-grade trim costing because that's how post-harvest labor actually works. Cost & P&L allocates overhead the way §263A actually requires, not a simplified version bolted on after the fact. This level of specificity can't be reverse-engineered from the outside.</p>
           </div>
           <div class="diff-proof" style="text-align:center;">
             <div class="diff-stat">25</div>
@@ -722,12 +809,25 @@
         </div>
         <div class="diff-card">
           <div class="diff-label">AI that understands cannabis</div>
-          <h3 class="diff-title">Import anything. Ask anything.</h3>
-          <p class="diff-body">Drop a CSV from any source and the platform figures out what it is. Ask "which strain is most profitable per pound?" and get an answer from your actual data — not a generic dashboard widget you have to interpret yourself.</p>
+          <h3 class="diff-title">Import anything. Ask anything. It gets smarter over time.</h3>
+          <p class="diff-body">Drop a CSV from any source and the platform figures out what it is. Ask "which strain is most profitable per pound?" and get an answer from your actual data. When an answer isn't quite right for how your facility works, flag it — approved corrections improve the AI for every operator on the platform, not just you.</p>
+        </div>
+        <div class="diff-card">
+          <div class="diff-label">Self-service, not another support ticket</div>
+          <h3 class="diff-title">Every module, explained in plain language, built in</h3>
+          <p class="diff-body">A searchable Help center ships preloaded on day one — step-by-step, plain-English instructions for every module, so your team has an answer at 11pm without waiting on a support callback. Your facility's own real SOPs live right alongside it in the Compliance module.</p>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- PHOTO BAND: FLOWER MACRO -->
+  <div class="photo-band" style="background-image:url('images/flower-macro-purple.jpg');background-position:center 35%;">
+    <div class="photo-band-inner reveal">
+      <div class="photo-band-label">Grown by people who grow</div>
+      <p class="photo-band-text">Every field in this platform exists because someone needed it in a real room, on a real deadline.</p>
+    </div>
+  </div>
 
   <!-- COMPLIANCE -->
   <section class="compliance" id="compliance">
@@ -760,55 +860,38 @@
     </div>
   </section>
 
-  <!-- PRICING -->  <!-- PRICING -->
-  <section id="pricing" style="background:var(--black);">
+  <!-- PHOTO BAND: FLOWER ROOM -->
+  <div class="photo-band" style="background-image:url('images/flower-room-dense.jpg');">
+    <div class="photo-band-inner reveal">
+      <div class="photo-band-label">This is the room you're running</div>
+      <p class="photo-band-text">We built ResinOps because we were standing in one just like it.</p>
+    </div>
+  </div>
+
+  <!-- PILOT PARTNERSHIP -->
+  <section id="pilot" style="background:var(--black);">
     <div class="container">
-      <div class="section-label">Pricing</div>
-      <h2 class="section-title">Simple, operator-focused pricing</h2>
-      <p class="section-body">One platform, one price per facility. No per-user fees. No module unlocks. Everything included.</p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <div class="pricing-tier">Starter</div>
-          <div class="pricing-price"><sup>$</sup>299<sub>/mo</sub></div>
-          <p class="pricing-desc">For single-license cultivators and processors getting organized.</p>
-          <ul class="pricing-features">
-            <li>All 28+ modules included</li>
-            <li>1 facility, up to 5 users</li>
-            <li>AI data import</li>
-            <li>State compliance exports (NY, CO, OR, WA + more)</li>
-            <li>GMP batch records</li>
-            <li>Email support</li>
-          </ul>
+      <div class="section-label">Now onboarding</div>
+      <h2 class="section-title">We're scouting pilot partners</h2>
+      <p class="section-body">ResinOps is in active pilot with a small group of licensed operators — full platform access, free, in exchange for the real-world feedback that shapes what we build next.</p>
+      <div class="compliance-grid" style="grid-template-columns:repeat(3,1fr);margin-top:48px;">
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>🤝</span></div>
+          <div class="compliance-name">Free for pilot partners</div>
+          <div class="compliance-desc">Full access to every module, no tiers, no per-user fees — for the duration of the pilot</div>
         </div>
-        <div class="pricing-card featured">
-          <div class="pricing-badge">Most popular</div>
-          <div class="pricing-tier">Professional</div>
-          <div class="pricing-price"><sup>$</sup>499<sub>/mo</sub></div>
-          <p class="pricing-desc">For licensed processors with active vape and extract programs.</p>
-          <ul class="pricing-features">
-            <li>Everything in Starter</li>
-            <li>Unlimited users</li>
-            <li>AI Operations Analyst</li>
-            <li>Cannabinoid formulation calculator</li>
-            <li>Certificate of Conformity registry</li>
-            <li>Priority support</li>
-          </ul>
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>💬</span></div>
+          <div class="compliance-name">Direct product input</div>
+          <div class="compliance-desc">Your team's real workflow shapes what gets built next — feedback goes straight to the person running the platform</div>
         </div>
-        <div class="pricing-card">
-          <div class="pricing-tier">Enterprise</div>
-          <div class="pricing-price" style="font-size:36px;padding-top:8px;">Custom</div>
-          <p class="pricing-desc">For multi-license operators, MSOs, and chain facilities.</p>
-          <ul class="pricing-features">
-            <li>Everything in Professional</li>
-            <li>Multi-facility dashboard</li>
-            <li>Custom integrations</li>
-            <li>Dedicated onboarding</li>
-            <li>SLA support</li>
-            <li>Custom compliance reporting</li>
-          </ul>
+        <div class="compliance-item">
+          <div class="icon-ring icon-ring--lg"><span>🛠️</span></div>
+          <div class="compliance-name">Hands-on onboarding</div>
+          <div class="compliance-desc">Real setup and data migration help — not a self-serve signup you're left to figure out alone</div>
         </div>
       </div>
-      <p style="text-align:center;font-size:13px;color:var(--grey);margin-top:24px;">Free tier available. Start with your first facility — upgrade as you grow.</p>
+      <p style="text-align:center;font-size:13px;color:var(--grey);margin-top:32px;">Pilot spots are limited to a small number of facilities at a time.</p>
     </div>
   </section>
 
@@ -843,7 +926,7 @@
       </div>
       <div class="footer-links">
         <a href="https://app.resinops.com" target="_blank">Platform</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#pilot">Pilot Program</a>
         <a href="#waitlist">Request Access</a>
         <a href="mailto:alex@oldguardcannabis.com">Contact</a>
       </div>
@@ -899,6 +982,28 @@
         }
       });
     });
+
+    // Scroll reveal — fade/slide content in as it enters view
+    const revealSelectors = [
+      '.section-label', '.section-title', '.section-body',
+      '.pain-list', '.problem-quote',
+      '.module-card', '.step', '.diff-card', '.compliance-item',
+    ].join(', ');
+    document.querySelectorAll(revealSelectors).forEach(el => el.classList.add('reveal'));
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    }
   </script>
 
 </body>
