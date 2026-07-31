@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://resinops.com/sitemap.xml
